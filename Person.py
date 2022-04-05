@@ -1,12 +1,14 @@
 from math import sqrt
-from random import choice
+from random import shuffle
+from matplotlib.patches import Circle
 
 
-names = {"Bob": 0}
+colors = ["gold", "royalblue", "orange", "orangered", "crimson", "chartreuse"]
+shuffle(colors)
 
 
-class Person:
-    def __init__(self, depart: tuple, new_destination: tuple, new_vitesse: float = 1.2):
+class Person(Circle):
+    def __init__(self, depart: tuple, new_destination: tuple, new_vitesse: float = 1.2, new_size=0.5):
         """
         Initialisation des attributs de Person
 
@@ -15,14 +17,18 @@ class Person:
         :param float new_vitesse: Vitesse maximale
         """
 
+        super().__init__(depart, radius=new_size)
+
         self.destination = new_destination
-        self.position = depart
         self.vitesse = new_vitesse
+        self.size = new_size
 
         self.recalcul_vecteur()
 
-        self.name = choice(list(names.keys()))
-        self.name = self.name + " n°" + str(names[self.name] + 1)
+        self.name = colors[0]
+        self.set_color(self.name)
+
+        colors.pop(0)
 
     def recalcul_vecteur(self):
         """
@@ -31,8 +37,10 @@ class Person:
         :return: None
         """
 
-        adj = self.destination[0] - self.position[0]
-        opp = self.destination[1] - self.position[1]  # Noms de variable liés à la trigonométrie : projections
+        position = self.get_center()
+
+        adj = self.destination[0] - position[0]
+        opp = self.destination[1] - position[1]  # Noms de variable liés à la trigonométrie : projections
         hyp = sqrt(opp ** 2 + adj ** 2)
 
         coord_x = adj / hyp
@@ -46,10 +54,13 @@ class Person:
 
         :return: None
         """
-        self.position = (self.position[0] + self.vecteur[0], self.position[1] + self.vecteur[1])
+        position = self.get_center()
+
+        self.set_center((position[0] + self.vecteur[0], position[1] + self.vecteur[1]))
         self.recalcul_vecteur()
 
     def has_reach_goal(self):
-        return sqrt((self.position[0] - self.destination[0]) ** 2 + (self.position[1] - self.destination[1]) ** 2) < self.vitesse
+        position = self.get_center()
 
-
+        return sqrt((position[0] - self.destination[0]) ** 2 + (position[1] - self.destination[1]) ** 2) \
+               < self.vitesse

@@ -1,3 +1,5 @@
+import matplotlib.axes
+
 from Person import Person
 
 
@@ -8,11 +10,12 @@ class Crowd:
         self.size = N
         self.subjects = [Person(depart_list[i], arrive_list[i], speed_list[i]) for i in range(N)]
 
-    def update(self):
+    def update(self, axes: matplotlib.axes.Axes):
         i = 0
 
         while i < self.size:
             self.subjects[i].move()
+            axes.add_patch(self.subjects[i])
 
             if self.subjects[i].has_reach_goal():
                 print(self.subjects[i].name + " has reached his goal")
@@ -21,11 +24,5 @@ class Crowd:
             else:
                 i += 1
 
-    def print(self):
-        x, y = [], []
-
-        for i in range(self.size):
-            x.append(self.subjects[i].position[0])
-            y.append(self.subjects[i].position[1])
-
-        return x, y
+    def get_artists(self):
+        return self.subjects
