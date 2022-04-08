@@ -1,10 +1,8 @@
 from math import sqrt
-from random import shuffle
 from matplotlib.patches import Circle
 
 
-colors = ["gold", "royalblue", "orange", "orangered", "crimson", "chartreuse"]
-shuffle(colors)
+colors = ["crimson", "orangered", "orange", "gold", "chartreuse", "royalblue"]
 
 
 class Person(Circle):
