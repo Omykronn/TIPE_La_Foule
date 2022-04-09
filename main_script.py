@@ -2,24 +2,19 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
 from Crowd import Crowd
+from tools import speed_convert
 
 
 frame_rate = 30   # Nombre d'image par seconde
 N = 6  # Nombre de personnes à simuler
 
 depart = [(29, 20 / N * i) for i in range(-(N // 2), N // 2)]  # Position de départ des N personnes
-goal = [(0, 20 / N * i) for i in range(-(N // 2), N // 2)]  # But des N personnes (en l'occurence, l'origine du repère)
+goal = [(0, 0) for i in range(-(N // 2), N // 2)]  # But des N personnes (en l'occurence, l'origine du repère)
 vitesse = [2.1, 1.7, 1.3, 2.5, 1.5, 2.0]  # Vitesse en m/s de chacune des N personnes
-
 
 # ~~~~~~~~~~
 
-
-def speed_convert(v):
-    return v / frame_rate  # Traduit la vitesse réelle en une valeur en fonction de frame_rate
-
-
-crowd = Crowd(N, depart, goal, [speed_convert(v) for v in vitesse])  # On génère l'objet-conteneur des N personnes
+crowd = Crowd(N, depart, goal, [speed_convert(v, frame_rate) for v in vitesse])  # On génère l'objet-conteneur des N personnes
 
 fig = plt.figure()
 ax = plt.axes(xlim=(-1, 30), ylim=(-12, 12), aspect="equal")  # L'arguement aspect assure un repère orthonormé
