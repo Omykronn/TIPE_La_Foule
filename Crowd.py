@@ -1,6 +1,6 @@
 import matplotlib.axes
 
-from Person_Circle import Person
+from Person import Person
 
 
 class Crowd:
