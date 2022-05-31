@@ -23,7 +23,6 @@ crowd = Crowd(N, depart, goal)  # On génère l'objet-conteneur des N personnes
 
 fig = plt.figure()
 ax = plt.axes(xlim=x_interval, ylim=y_interval, aspect="equal")  # L'arguement aspect assure un repère orthonormé
-plt.plot([depart[0][0], goal[0][0]], [depart[0][1], goal[0][1]])
 
 # Définition des écarts entre les marques sur les axes
 ax.set_xticks([i + 0.5 for i in range(x_interval[0], x_interval[1])])
