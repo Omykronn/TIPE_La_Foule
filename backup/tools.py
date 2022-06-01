@@ -1,3 +1,6 @@
+from collections import deque
+
+
 def speed_convert(v, frame_rate):
     return v / frame_rate  # Traduit la vitesse réelle en une valeur en fonction de frame_rate
 
@@ -12,3 +15,23 @@ def sum_vector2D(v1, v2):
     """
 
     return v1[0] + v2[0], v1[1] + v2[1]
+
+
+def string_to_tuple(string: str, char: str = ':'):
+    coors = string.split(char)
+    list_temp = []
+
+    for item in coors:
+        list_temp.append(int(item))
+
+    return tuple(list_temp)
+
+
+def string_to_deque(string: str, char: str = '|'):
+    d = deque()
+    str_tuple = string.split(char)
+
+    for item in str_tuple:
+        d.append(string_to_tuple(item))
+
+    return d

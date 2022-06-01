@@ -8,7 +8,7 @@ colors = ["crimson", "orangered", "orange", "gold", "chartreuse", "royalblue"]
 
 
 class Person(Circle):
-    def __init__(self, depart: tuple, destination: tuple, size=0.5, priority=1):
+    def __init__(self, depart: tuple, destination: tuple, size=0.5, priority=1, speed=2):
         """
         Initialisation des attributs de Person
 
@@ -24,6 +24,7 @@ class Person(Circle):
         self.destination = destination
 
         # Déplacement
+        self.speed = speed
         self.path = a_star(self._center, self.destination)
         self.path.append(self.destination)  # Pour avoir une frame où la personne est sur sa destination
 
@@ -36,16 +37,6 @@ class Person(Circle):
         self.set_color(self.name)
 
         colors.pop(0)  # On retire la couleur de la liste afin de ne pas avoir de doublon de couleur/nom
-
-        # TEMPORAIRE, TODO: Supprimer dès que le A* Algo. est implémenté)
-        self._center = (self._center[0], self.destination[1])
-
-        if self._center[0] <= self.destination[0]:
-            self.path = deque([(n, self.destination[1]) for n in range(self._center[0], self.destination[0] + 1)])
-        else:
-            self.path = deque([(n, self.destination[1]) for n in range(self._center[0], self.destination[0] - 1, -1)])
-
-        self.path.append(self.destination)
 
     def move(self):
         """

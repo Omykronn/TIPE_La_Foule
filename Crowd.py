@@ -1,10 +1,12 @@
 import matplotlib.axes
+from pandas import read_csv
+from backup.tools import string_to_tuple, string_to_deque
 
 from Person import Person
 
 
 class Crowd:
-    def __init__(self, N: int, depart_list: list, arrive_list: list):
+    def __init__(self, N: int = 0, depart_list: list = [], arrive_list: list = []):
         """
         Définition des attributs des instances
 
@@ -19,6 +21,22 @@ class Crowd:
         self.size = N  # Enregistrement de la taille de la foule
         # Création de chacune des personnes
         self.subjects = [Person(depart_list[i], arrive_list[i]) for i in range(N)]
+
+    def add_from_csv(self, csv_dir):
+        data = read_csv(csv_dir, sep=";")
+        n_person = len(data)
+
+        self.size += n_person
+
+        for i in range(n_person):
+            new_person = Person(depart=string_to_tuple(data["depart"][i]),
+                                destination=string_to_tuple(data["destination"][i]),
+                                size=float(data["size"][i]),
+                                priority=int(data["priority"][i]),
+                                speed=int(data["speed"][i]))
+            new_person.path = string_to_deque(data["path"][i])
+
+            self.subjects.append(new_person)
 
     def update(self, axes: matplotlib.axes.Axes):
         """

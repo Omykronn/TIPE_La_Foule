@@ -3,21 +3,17 @@ import matplotlib.animation as animation
 
 from Crowd import Crowd
 
-""" Paramètres d'affichage """
+""" Paramètres """
 frame_rate = 3   # Nombre d'image par seconde
 x_interval = (-30, 30)  # Limites de l'axe X
 y_interval = (-12, 12)  # Limites de l'axe Y
 
-
-""" Parammètres de la simulation """
-N = 3 # Nombre de personnes à simuler
-
-depart = [(-30, 12), (-15, 12), (25, 25)]  # Position de départ des N personnes
-goal = [(0, 0) for _ in range(N)]  # But des N personnes (en l'occurence, l'origine du repère)
+csv_location = "/home/saintv/Documents/PycharmProjects/TIPE_La_Foule/resources/param_people.csv"
 
 # ~~~~~~~~~~
 
-crowd = Crowd(N, depart, goal)  # On génère l'objet-conteneur des N personnes
+crowd = Crowd()  # On génère l'objet-conteneur des N personnes
+crowd.add_from_csv(csv_location)
 
 fig = plt.figure()
 ax = plt.axes(xlim=x_interval, ylim=y_interval, aspect="equal")  # L'arguement aspect assure un repère orthonormé
