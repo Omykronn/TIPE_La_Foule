@@ -1,10 +1,6 @@
 from collections import deque
 
 
-def speed_convert(v, frame_rate):
-    return v / frame_rate  # Traduit la vitesse réelle en une valeur en fonction de frame_rate
-
-
 def sum_vector2D(v1, v2):
     """
     Somme deux 2-uplets coefficients par coefficients
