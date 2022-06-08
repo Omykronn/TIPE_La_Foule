@@ -1,5 +1,5 @@
 from matplotlib.patches import Circle
-from collections import deque
+# from collections import deque
 
 from AStar import a_star
 
@@ -8,13 +8,15 @@ colors = ["crimson", "orangered", "orange", "gold", "chartreuse", "royalblue"]
 
 
 class Person(Circle):
-    def __init__(self, depart: tuple, destination: tuple, size=0.5, priority=1, speed=2):
+    def __init__(self, depart: tuple, destination: tuple, size: float = 0.5, priority: int = 1, speed: int = 1):
         """
         Initialisation des attributs de Person
 
         :param tuple depart: Coordonnées du point de départ
         :param tuple destination: Coordonnées du point d'arrivée visé
-        :param float new_vitesse: Vitesse maximale
+        :param float size: Rayon de la sphère (et donc taille de la réprésentation)
+        :param int priority: Indice de priorité social
+        :param float speed: Vitesse de parcours de self.path (et donc de déplacement)
         """
 
         super().__init__(depart, radius=size)  # On utilise l'initialisation de la classe-parent
@@ -25,8 +27,10 @@ class Person(Circle):
 
         # Déplacement
         self.speed = speed
-        self.path = a_star(self._center, self.destination)
-        self.path.append(self.destination)  # Pour avoir une frame où la personne est sur sa destination
+        self.path = a_star(self._center, self.destination)  # self.path devra être de longueur divisible par self.speed
+
+        while len(self.path) % self.speed != 0:  # On compléte alors avec des destinations
+            self.path.append(self.destination)
 
         # Attribut
         self.priority = priority
@@ -45,8 +49,10 @@ class Person(Circle):
         :return None:
         """
 
-        self._center = self.path[0]
-        self.path.popleft()
+        self._center = self.path[self.speed - 1]
+
+        for _ in range(self.speed):  # self.path contient toutes les étapes des déplacements : seul self.vitesse importe
+            self.path.popleft()      # dans le parcours des étapes (c'est l'incrémentation)
 
     def has_reached_goal(self):
         """

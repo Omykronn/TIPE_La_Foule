@@ -36,6 +36,9 @@ class Crowd:
                                 speed=int(data["speed"][i]))
             new_person.path = string_to_deque(data["path"][i])
 
+            while len(new_person.path) % new_person.speed != 0:
+                new_person.path.append(new_person.destination)
+
             self.subjects.append(new_person)
 
     def update(self, axes: matplotlib.axes.Axes):
