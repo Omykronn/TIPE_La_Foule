@@ -1,3 +1,4 @@
+from collections import deque
 from tools import sum_vector2D
 
 
@@ -61,3 +62,9 @@ class Node:
                                            g=self.g + 1))
 
         return successors
+
+    def get_path(self):
+        if self.parent is None:
+            return [self.value]
+        else:
+            return self.parent.get_path() + [self.value]  # On utilise l'opération + afin de créer un nouvel objet
