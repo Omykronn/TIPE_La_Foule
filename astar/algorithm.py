@@ -25,8 +25,8 @@ def minimum(node_dict: dict):
     return min_tag
 
 
-def a_star(begin, end, heuristic=euclidean_distance):
-    open_dict = {begin: Node(begin, h=0)}
+def a_star(begin, end, heuristic=euclidean_distance, blocked: list = []):
+    open_dict = {begin: Node(begin, forbidden=blocked, h=0)}
     closed_dict = {}
 
     while end not in closed_dict:

@@ -3,18 +3,20 @@ from tools import sum_vector2D
 
 
 class Node:
-    def __init__(self, value, parent=None, g: float = 0, h: float = float("inf")):
+    def __init__(self, value, parent=None, forbidden: list = [], g: float = 0, h: float = float("inf")):
         """
         Initialisation de l'instance
 
         :param value: Value de l'instance
         :param Node parent: Node parent de l'instance
+        :param float * float List forbidden: Liste des valeurs interdites
         :param float g: Coût Accumulé
         :param float h: Estimation Heuristique
         """
 
         self.value = value
         self.parent = parent
+        self.forbidden = forbidden
         self.g = g
         self.h = h
 
@@ -56,9 +58,12 @@ class Node:
 
         for i in move:
             for j in move:
-                if not(i == 0 and j == 0):
-                    successors.append(Node(value=sum_vector2D(self.value, (i, j)),
+                new_value = sum_vector2D(self.value, (i, j))
+
+                if new_value != self.value and new_value not in self.forbidden:
+                    successors.append(Node(value=new_value,
                                            parent=self,
+                                           forbidden=self.forbidden,
                                            g=self.g + 1))
 
         return successors

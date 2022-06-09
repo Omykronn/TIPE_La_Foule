@@ -1,9 +1,20 @@
 import matplotlib.pyplot as plt
+from matplotlib.patches import Rectangle
+
 from astar.algorithm import a_star
 
 """ Paramètres """
 x_interval = (-30, 30)  # Limites de l'axe X
 y_interval = (-12, 12)  # Limites de l'axe Y
+
+blocked_cell = [(i, 3) for i in range(-5, 0)] + [(i, 3) for i in range(3, 6)] + \
+               [(i, 5) for i in range(-5, -2)] + [(i, 5) for i in range(-1, 6)] + \
+               [(i, -3) for i in range(-5, 6)] + [(-5, i) for i in range(-2, 2)] + [(5, i) for i in range(-2, 4)] + \
+               [(10, i) for i in range(-5, 10)]
+
+data = [((0, 10), (0, 0), "blue"),
+        ((-1, -10), (0, 0), "red"),
+        ((20, 10), (0, 0), "green")]
 """ ---------- """
 
 
@@ -30,9 +41,14 @@ plt.yticks(color="w")
 
 canva, = ax.plot([0], [0], 'bo', ms=5, color="silver")  # On place un point gris à l'origine
 
+# Affichage des obstacles
+for x, y in blocked_cell:
+    ax.add_patch(Rectangle((x - 0.5, y - 0.5), 1, 1, facecolor="silver"))
+
 # Affichage des trajectoires
-x_list, y_list = unlink(a_star((10, 10), (0, 0)))
-plt.plot(x_list, y_list)
+for start, stop, color in data:
+    x_list, y_list = unlink(a_star(start, stop, blocked=blocked_cell))
+    plt.plot(x_list, y_list, color=color)
 
 plt.grid(which="major")  # Affichage d'une grille pour plus de visibilité
 plt.show()  # Affichage de la fenêtre
