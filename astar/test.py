@@ -2,31 +2,15 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
 
 from astar.algorithm import a_star
-
-""" Paramètres """
-x_interval = (-30, 30)  # Limites de l'axe X
-y_interval = (-12, 12)  # Limites de l'axe Y
-
-blocked_cell = [(i, 3) for i in range(-5, 0)] + [(i, 3) for i in range(3, 6)] + \
-               [(i, 5) for i in range(-5, -2)] + [(i, 5) for i in range(-1, 6)] + \
-               [(i, -3) for i in range(-5, 6)] + [(-5, i) for i in range(-2, 2)] + [(5, i) for i in range(-2, 4)] + \
-               [(10, i) for i in range(-5, 10)]
-
-data = [((0, 10), (0, 0), "blue"),
-        ((-1, -10), (0, 0), "red"),
-        ((20, 10), (0, 0), "green")]
-""" ---------- """
+from tools import unlink
 
 
-def unlink(data_list: list):
-    x_data, y_data = [], []
+x_interval = (-1, 11)  # Limites de l'axe X
+y_interval = (-1, 11)  # Limites de l'axe Y
 
-    for x, y in data_list:
-        x_data.append(x)
-        y_data.append(y)
-
-    return x_data, y_data
-
+data = [((9, 10), (0, 0), "crimson"),
+        ((10, 3), (0, 0), "royalblue")]
+blocked_cell = [(2, 6), (3, 6), (3, 5), (7, 8), (8, 8), (8, 7), (3, 1), (6, 4), (6, 3), (5, 7)]
 
 fig = plt.figure()
 ax = plt.axes(xlim=x_interval, ylim=y_interval, aspect="equal")  # L'arguement aspect assure un repère orthonormé
@@ -45,9 +29,11 @@ canva, = ax.plot([0], [0], 'bo', ms=5, color="silver")  # On place un point gris
 for x, y in blocked_cell:
     ax.add_patch(Rectangle((x - 0.5, y - 0.5), 1, 1, facecolor="silver"))
 
+print("OBSTACLES : OKAY")
+
 # Affichage des trajectoires
-for start, stop, color in data:
-    x_list, y_list = unlink(a_star(start, stop, blocked=blocked_cell))
+for start, goal, color in data:
+    x_list, y_list = unlink(a_star(start, goal, blocked=blocked_cell))
     plt.plot(x_list, y_list, color=color)
 
 plt.grid(which="major")  # Affichage d'une grille pour plus de visibilité

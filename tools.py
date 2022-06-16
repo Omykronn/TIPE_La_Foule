@@ -13,7 +13,30 @@ def sum_vector2D(v1, v2):
     return v1[0] + v2[0], v1[1] + v2[1]
 
 
+def unlink(data_list: list):
+    """
+    Sépare une liste de couples en deux listes dont les coefficients des couples portent le même indice
+
+    :param list data_list: Liste à scinder
+    :return list * list: Listes des coefficients des couples
+    """
+    x_data, y_data = [], []
+
+    for x, y in data_list:
+        x_data.append(x)
+        y_data.append(y)
+
+    return x_data, y_data
+
+
 def string_to_tuple(string: str, char: str = ':'):
+    """
+    Convertie une chaîne de caractères en tuple selon le caractère divisant char
+
+    :param str string: Chaîne de caractères à convertir
+    :param char char: Caractère divisant
+    :return tuple: Tuple issu de la conversion de string
+    """
     coors = string.split(char)
     list_temp = []
 
@@ -24,6 +47,13 @@ def string_to_tuple(string: str, char: str = ':'):
 
 
 def string_to_deque(string: str, char: str = '|'):
+    """
+    Divise une chaîne de caractères en liste selon le caractère séparant char
+
+    :param str string: Chaîne de caractères à convertir
+    :param char char: Caractère séparant
+    :return list: Liste issue de la conversion de string
+    """
     d = deque()
     str_tuple = string.split(char)
 

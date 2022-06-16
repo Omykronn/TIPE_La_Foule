@@ -60,11 +60,16 @@ class Node:
             for j in move:
                 new_value = sum_vector2D(self.value, (i, j))
 
+                if i != 0 and j != 0:  # Mouvement en diagonale
+                    cost = 1.44  # ~ Racine de 2
+                else:
+                    cost = 1
+
                 if new_value != self.value and new_value not in self.forbidden:
                     successors.append(Node(value=new_value,
                                            parent=self,
                                            forbidden=self.forbidden,
-                                           g=self.g + 1))
+                                           g=self.g + cost))
 
         return successors
 

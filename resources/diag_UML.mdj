@@ -2511,7 +2511,7 @@
 											"top": 336,
 											"width": 720.83349609375,
 											"height": 13,
-											"text": "+a_star(begin: Node, end: Node, heuristic: Function = euclidean_distance, blocked: Float * Float List = []): Float * Float deque",
+											"text": "+a_star(begin: Node, end: Node, heuristic: Function = euclidean_distance, blocked: Float * Float List = []): Float * Float List",
 											"horizontalAlignment": 0
 										},
 										{
@@ -3618,7 +3618,7 @@
 											},
 											"name": "return",
 											"type": {
-												"$ref": "AAAAAAGBG1LFI42EPiI="
+												"$ref": "AAAAAAGBGrMjp/SEGbA="
 											},
 											"direction": "return"
 										},
