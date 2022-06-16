@@ -61,7 +61,7 @@ class Node:
                 new_value = sum_vector2D(self.value, (i, j))
 
                 if i != 0 and j != 0:  # Mouvement en diagonale
-                    cost = 1.44  # ~ Racine de 2
+                    cost = float("inf")  # Racine de 2
                 else:
                     cost = 1
 

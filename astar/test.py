@@ -2,15 +2,43 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
 
 from astar.algorithm import a_star
-from tools import unlink
+from creer_lab import lab
 
 
-x_interval = (-1, 11)  # Limites de l'axe X
-y_interval = (-1, 11)  # Limites de l'axe Y
+a = 32
 
-data = [((9, 10), (0, 0), "crimson"),
-        ((10, 3), (0, 0), "royalblue")]
-blocked_cell = [(2, 6), (3, 6), (3, 5), (7, 8), (8, 8), (8, 7), (3, 1), (6, 4), (6, 3), (5, 7)]
+x_interval = (-1, a)  # Limites de l'axe X
+y_interval = (-1, a)  # Limites de l'axe Y
+
+# Génération labyrinthe
+
+start, goal = None, None
+blocked_cell = []
+
+raw = lab(a, 1, 1, "H")
+
+print("LAB : OKAY")
+
+raw_lab = raw[0]
+start = (raw[1][1], raw[1][0])
+goal = raw[2]
+
+
+for i in range(a):
+    for j in range(a):
+        if raw_lab[i][j] == 3 or raw_lab[i][j] == 1 or raw_lab[i][j] == 2:
+            blocked_cell.append((i, j))
+
+
+def unlink(data_list: list):
+    x_data, y_data = [], []
+
+    for x, y in data_list:
+        x_data.append(x)
+        y_data.append(y)
+
+    return x_data, y_data
+
 
 fig = plt.figure()
 ax = plt.axes(xlim=x_interval, ylim=y_interval, aspect="equal")  # L'arguement aspect assure un repère orthonormé
@@ -32,9 +60,13 @@ for x, y in blocked_cell:
 print("OBSTACLES : OKAY")
 
 # Affichage des trajectoires
-for start, goal, color in data:
-    x_list, y_list = unlink(a_star(start, goal, blocked=blocked_cell))
-    plt.plot(x_list, y_list, color=color)
+data = a_star(start, goal, blocked=blocked_cell)
+
+print("A* : OKAY")
+
+for tag in data:
+    x_list, y_list = unlink(data[tag].get_path())
+    plt.plot(x_list, y_list)
 
 plt.grid(which="major")  # Affichage d'une grille pour plus de visibilité
 plt.show()  # Affichage de la fenêtre

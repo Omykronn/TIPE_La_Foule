@@ -39,10 +39,18 @@ def a_star(begin, end, heuristic=euclidean_distance, blocked: list = []):
         for subnode in q.generate_successors():
             subnode.h = heuristic(subnode.value, end)
 
+            """if subnode.value in open_dict and open_dict[subnode.value].f() > subnode.f():
+                # Si subnode existe déjà dans open_list, mais avec une f plus faible : on le remplace
+                open_dict[subnode.value] = subnode
+            elif not (subnode.value in closed_dict and closed_dict[subnode.value].f() > subnode.f()):
+                # Si on a pas "subnode existe déjà dans closed_list et sa f est inférieur", alors on le rajoute
+                # dans open_list
+                open_dict[subnode.value] = subnode"""
+
             if subnode.value in open_dict:
                 if open_dict[subnode.value].f() > subnode.f():
                     open_dict[subnode.value] = subnode
             else:
                 open_dict[subnode.value] = subnode
 
-    return closed_dict[end].get_path()
+    return closed_dict
