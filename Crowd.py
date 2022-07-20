@@ -1,6 +1,6 @@
 import matplotlib.axes
 from pandas import read_csv
-from backup.tools import string_to_tuple, string_to_deque
+from tools import string_to_tuple, string_to_deque
 
 from Person import Person
 

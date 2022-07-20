@@ -1,7 +1,7 @@
 from matplotlib.patches import Circle
 # from collections import deque
 
-from AStar import a_star
+from astar.algorithm import a_star
 
 
 colors = ["crimson", "orangered", "orange", "gold", "chartreuse", "royalblue"]
