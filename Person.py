@@ -1,5 +1,5 @@
 from matplotlib.patches import Circle
-# from collections import deque
+from collections import deque
 
 from astar.algorithm import a_star
 
@@ -27,7 +27,10 @@ class Person(Circle):
 
         # Déplacement
         self.speed = speed
-        self.path = a_star(self._center, self.destination)  # self.path devra être de longueur divisible par self.speed
+        self.path = deque(a_star(self._center, self.destination))  # self.path devra être de longueur divisible par self.speed
+
+        if self.speed == 1:  # Pour avoir le personnage sur sa destination sur au moins une frame
+            self.path.append(self.destination)
 
         while len(self.path) % self.speed != 0:  # On compléte alors avec des destinations
             self.path.append(self.destination)

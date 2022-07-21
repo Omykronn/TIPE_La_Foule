@@ -61,7 +61,8 @@ class Node:
                 new_value = sum_vector2D(self.value, (i, j))
 
                 if i != 0 and j != 0:  # Mouvement en diagonale
-                    cost = 1.44  # ~ Racine de 2
+                    cost = 1.25  # Initialement Racine de 2, mais peu naturel dans le cas de mouvements diagonaux sans
+                                 # obstacles, puis tatonnment
                 else:
                     cost = 1
 

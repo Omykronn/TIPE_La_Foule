@@ -23,13 +23,9 @@ ax.set_yticks([i + 0.5 for i in range(y_interval[0], y_interval[1])])
 plt.xticks(color="w")
 plt.yticks(color="w")
 
-canva, = ax.plot([0], [0], 'bo', ms=5, color="silver")  # On place un point gris à l'origine
-
 # Affichage des obstacles
 for x, y in blocked_cell:
     ax.add_patch(Rectangle((x - 0.5, y - 0.5), 1, 1, facecolor="silver"))
-
-print("OBSTACLES : OKAY")
 
 # Affichage des trajectoires
 for start, goal, color in data:

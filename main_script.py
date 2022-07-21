@@ -1,19 +1,26 @@
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
+from tools import unlink
+
 from Crowd import Crowd
 
-""" Paramètres """
+# Paramètres
+
+N = 2
+start_pos = [(0, -10), (-10, 0)]
+end_pos = [(0, 10), (10, 0)]
+
 frame_rate = 3   # Nombre d'image par seconde
-x_interval = (-30, 30)  # Limites de l'axe X
+x_interval = (-12, 12)  # Limites de l'axe X
 y_interval = (-12, 12)  # Limites de l'axe Y
 
 csv_location = "/home/saintv/Documents/PycharmProjects/TIPE_La_Foule/resources/param_people.csv"
 
 # ~~~~~~~~~~
 
-crowd = Crowd()  # On génère l'objet-conteneur des N personnes
-crowd.add_from_csv(csv_location)
+crowd = Crowd(N, start_pos, end_pos)  # On génère l'objet-conteneur des N personnes
+# crowd.add_from_csv(csv_location)
 
 fig = plt.figure()
 ax = plt.axes(xlim=x_interval, ylim=y_interval, aspect="equal")  # L'arguement aspect assure un repère orthonormé
@@ -26,7 +33,10 @@ ax.set_yticks([i + 0.5 for i in range(y_interval[0], y_interval[1])])
 plt.xticks(color="w")
 plt.yticks(color="w")
 
-canva, = ax.plot([0], [0], 'bo', ms=5, color="silver")  # On place un point gris à l'origine
+# Affichage des trajectoires
+for person in crowd.subjects:
+    x_list, y_list = unlink(person.path)
+    plt.plot(x_list, y_list, color=person.name)
 
 
 def draw(j=0):
