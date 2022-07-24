@@ -1,4 +1,3 @@
-from collections import deque
 from tools import sum_vector2D
 
 

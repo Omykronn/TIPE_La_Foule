@@ -1,47 +1,36 @@
 import matplotlib.axes
-from pandas import read_csv
-from tools import string_to_tuple, string_to_deque
+from tools import read_csv
 
 from Person import Person
 
 
 class Crowd:
-    def __init__(self, N: int = 0, depart_list: list = [], arrive_list: list = []):
+    def __init__(self, csv_dir: str, move_resol: int = 10):
         """
-        Définition des attributs des instances
+        Définition des attributs des instances, selon un fichier CSV externe (pour plus de simplicité dans le cas d'une
+        réitération avec les mêmes conditions
 
-        :param int N: Nombre de personnes dans la foule
-        :param list depart_list: Liste des coordonnées des départs de chaque personne
-        :param list arrive_list: Liste des coordonnées des arrivées de chaque personne
-        :param list speed_list: Liste des vitesses de chacune des personnes
+        :param str csv_dir: Chemin du fichier CSV (contenant les informations sur les Agents) à ouvrir
+        :param int move_resol: Indice de qualité de la transition
         """
-        # On vérifie la concordance de N et des longueurs des listes
-        assert len(depart_list) == len(arrive_list) == N
+        self.subjects = []
+        self.move_resol = move_resol
 
-        self.size = N  # Enregistrement de la taille de la foule
-        # Création de chacune des personnes
-        self.subjects = [Person(depart_list[i], arrive_list[i]) for i in range(N)]
+        # Lecture du fichier CSV
+        data = read_csv(csv_dir)
 
-    def add_from_csv(self, csv_dir):
-        data = read_csv(csv_dir, sep=";")
-        n_person = len(data)
+        for info in data:
+            # On crée chaque agent en fonction des informations données, ligne par ligne
+            self.subjects.append(Person(name=info[0],
+                                        depart=(int(info[4]), int(info[5])),
+                                        destination=(int(info[6]), int(info[7])),
+                                        priority=int(info[1]),
+                                        speed=int(info[2]),
+                                        color=info[3]))
 
-        self.size += n_person
+        self.size = len(self.subjects)  # On définit la taille de la foule (nombre d'agents)
 
-        for i in range(n_person):
-            new_person = Person(depart=string_to_tuple(data["depart"][i]),
-                                destination=string_to_tuple(data["destination"][i]),
-                                size=float(data["size"][i]),
-                                priority=int(data["priority"][i]),
-                                speed=int(data["speed"][i]))
-            new_person.path = string_to_deque(data["path"][i])
-
-            while len(new_person.path) % new_person.speed != 0:
-                new_person.path.append(new_person.destination)
-
-            self.subjects.append(new_person)
-
-    def update(self, axes: matplotlib.axes.Axes):
+    def update(self, axes: matplotlib.axes.Axes, f):
         """
         Mise à jour de la foule, en faisant avancer personne par personne
 
@@ -50,15 +39,28 @@ class Crowd:
         i = 0
 
         while i < self.size:
-            self.subjects[i].move()
+            if f % self.move_resol == 0 and f > 0:
+                # Dans le cas où le numéro de frame f est multiple de self.move_resol, on fait avancer l'Agent à la case
+                # suivante (et ceux uniquement pour f > 0 à cause d'un problème avec f = 0 dans l'animation)
+                self.subjects[i].move()
+            else:
+                # Autrement, on effectue la transition case à case, dont les étapes sont indicées par le modulo de f par
+                # self.move_resol
+                self.subjects[i].half_move((f % self.move_resol) / self.move_resol)
+
+            # On ajoute le disque représentant de l'Agent à l'objet axes de matplotlib
             axes.add_patch(self.subjects[i])
 
             if self.subjects[i].has_reached_goal():
-                print(self.subjects[i].name + " has reached his goal")  # Petit message lors de l'arrivée
+                print("GOAL : " + self.subjects[i].name)  # Petit message lors de l'arrivée
                 self.subjects.pop(i)  # Si on retire la personne en question, la taille de la liste va changer, et la
-                self.size -= 1        # la personne suivant sera alors d'indice i, d'où la non-incrémentation de i
+                self.size -= 1  # la personne suivant sera alors d'indice i, d'où la non-incrémentation de i
             else:
                 i += 1
 
     def get_artists(self):
+        """
+        Renvoie la liste des Agents (nécessaire pour l'animation)
+        """
+
         return self.subjects
